@@ -7,34 +7,49 @@
 import React, {Component} from 'react';
 import {
     AppRegistry,
-    StyleSheet,
     Text,
-    Button,
-    View
-} from 'react-native';
+    TouchableHighlight,
+    View,
+    ListView,
 
-import {StackNavigator, TabNavigator} from 'react-navigation'
+} from 'react-native';
+import ItemView from './src/ItemView';
+
+import {StackNavigator} from 'react-navigation'
 
 class HomeScreen extends Component {
+    // Initialize the hardcoded data
     static navigationOptions = {
-        title: 'Gank',
+        title: "Gank",
     };
+
+    constructor(props) {
+        super(props);
+        const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+        this.state = {
+            dataSource: ds.cloneWithRows([
+                'John', 'Joel', 'James', 'Jimmy', 'Jackson', 'Jillian', 'Julie', 'Devin'
+            ])
+        };
+        fetchData();
+    }
 
     render() {
         const {navigate} = this.props.navigation;
+
         return (
-            <View style={styles.container}>
-              <Text style={styles.welcome}
-                    onPress={()=>navigate('Detail',{title:"2017-04-08 News"})}>
-                Welcome to React Native!
-              </Text>
-              <Text style={styles.instructions}>
-                To get started, edit index.ios.js
-              </Text>
-              <Text style={styles.instructions}>
-                Press Cmd+R to reload,{'\n'}
-                Cmd+D or shake for dev menu
-              </Text>
+            <View >
+                <ListView
+                    dataSource={this.state.dataSource}
+                    renderRow={ (rowData) =>
+                    <TouchableHighlight
+                    onPress={()=>navigate("Detail",{title:rowData})}>
+                                        <View>
+                     <ItemView
+                        title={rowData}
+                        /></View>
+                    </TouchableHighlight>}
+                />
             </View>
         );
     }
@@ -49,59 +64,26 @@ class DetailScreen extends Component {
         const {params}= this.props.navigation.state;
         return (
             <View>
-              <Text>This is detail need request data {params.title} </Text>
+                <Text>This is detail need request data {params.title} </Text>
             </View>
         );
     }
 }
 
-class Android extends Component {
-    render() {
-        return <Text onPress={()=>navigate('Detail',{title:"2017-04-08 News Android"})}>Android</Text>
-    }
-}
-
-class iOS extends Component {
-    render() {
-        const {navigate} = this.props.navigation;
-        return <Text onPress={()=>navigate('Detail',{title:"2017-04-08 News iOS"})}>iOS</Text>
-    }
-}
-
-const MainScreenNavigator = TabNavigator({
+const GankApp = StackNavigator({
     Home: {screen: HomeScreen},
-    Android: {screen: Android},
-    iOS: {screen: iOS},
-});
-
-MainScreenNavigator.navigationOptions = {
-    title: "Home",
-};
-
-const GankApp = StackNavigator
-({
-    Home: {screen: MainScreenNavigator},
     Detail: {screen: DetailScreen},
 });
 
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#F5FCFF',
-    },
-    welcome: {
-        fontSize: 20,
-        textAlign: 'center',
-        margin: 10,
-    },
-    instructions: {
-        textAlign: 'center',
-        color: '#333333',
-        marginBottom: 5,
-    },
-});
+function fetchData() {
+    return fetch('https://facebook.github.io/react-native/movies.json')
+        .then((response) => response.json)
+        .then((responseJson) => {
+            return responseJson.moviesl
+        })
+        .catch((error) => {
+            console.error(error);
+        })
+}
 
 AppRegistry.registerComponent('webApp', () => GankApp);
