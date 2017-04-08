@@ -13,7 +13,7 @@ import {
     View
 } from 'react-native';
 
-import {StackNavigator} from 'react-navigation'
+import {StackNavigator, TabNavigator} from 'react-navigation'
 
 class HomeScreen extends Component {
     static navigationOptions = {
@@ -55,11 +55,35 @@ class DetailScreen extends Component {
     }
 }
 
+class Android extends Component {
+    render() {
+        return <Text onPress={()=>navigate('Detail',{title:"2017-04-08 News Android"})}>Android</Text>
+    }
+}
+
+class iOS extends Component {
+    render() {
+        const {navigate} = this.props.navigation;
+        return <Text onPress={()=>navigate('Detail',{title:"2017-04-08 News iOS"})}>iOS</Text>
+    }
+}
+
+const MainScreenNavigator = TabNavigator({
+    Home: {screen: HomeScreen},
+    Android: {screen: Android},
+    iOS: {screen: iOS},
+});
+
+MainScreenNavigator.navigationOptions = {
+    title: "Home",
+};
+
 const GankApp = StackNavigator
 ({
-    Home: {screen: HomeScreen},
+    Home: {screen: MainScreenNavigator},
     Detail: {screen: DetailScreen},
 });
+
 
 const styles = StyleSheet.create({
     container: {
