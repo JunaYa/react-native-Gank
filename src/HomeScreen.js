@@ -39,7 +39,7 @@ export default class extends Component {
                     }
                     renderRow={ (rowData) =>
                         <TouchableHighlight
-                            onPress={()=>navigate("Detail",{title:rowData.title})}>
+                            onPress={()=>navigate("Detail",{data:rowData})}>
                             <View><ItemView data ={rowData}/></View>
                         </TouchableHighlight>}
                 />

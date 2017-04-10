@@ -4,23 +4,21 @@
 
 import React, {Component} from 'react';
 import {
-    StyleSheet,
-    View,
-    Text,
-
+    StyleSheet
+    , WebView
 } from 'react-native';
 
 export default class  extends Component {
     static navigationOptions = {
-        title: ({state}) => state.params.title,
+        title: ({state}) => state.params.data.desc,
     };
 
     render() {
         const {params}= this.props.navigation.state;
         return (
-            <View>
-                <Text>This is detail need request data {params.title} </Text>
-            </View>
+            <WebView
+                source={{uri:params.data.url}}
+            />
         );
     }
 }
