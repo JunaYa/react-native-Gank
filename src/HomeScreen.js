@@ -3,7 +3,7 @@
  */
 
 import React, {Component} from 'react';
-import {View, ListView,TouchableHighlight} from 'react-native'
+import {View, ListView, TouchableHighlight, RefreshControl} from 'react-native'
 import ItemView from './ItemView';
 
 export default class extends Component {
@@ -14,42 +14,53 @@ export default class extends Component {
 
     constructor(props) {
         super(props);
-        const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
         this.state = {
-            dataSource: ds.cloneWithRows([
-                'John', 'Joel', 'James', 'Jimmy', 'Jackson', 'Jillian', 'Julie', 'Devin'
-            ])
+            dataSource: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 != r2}).cloneWithRows([
+                {"title": "Inception", "releaseYear": "2010"},
+            ]),
+            isRefreshing: false,
+            isError: false,
         };
     }
 
     render() {
         const {navigate} = this.props.navigation;
-
         return (
             <View >
                 <ListView
                     dataSource={this.state.dataSource}
+                    refreshControl={
+                        <RefreshControl
+                            refreshing={this.state.isRefreshing}
+                            onRefresh={this._onRefresh.bind(this)}
+                            title={'Loading...'}
+                            tintColor={'#ff8715'}
+                        />
+                    }
                     renderRow={ (rowData) =>
-                    <TouchableHighlight
-                    onPress={()=>navigate("Detail",{title:rowData})}>
-                                        <View>
-                     <ItemView
-                        title={rowData}
-                        /></View>
-                    </TouchableHighlight>}
+                        <TouchableHighlight
+                            onPress={()=>navigate("Detail",{title:rowData.title})}>
+                            <View><ItemView data ={rowData}/></View>
+                        </TouchableHighlight>}
                 />
             </View>
         );
     }
-}
 
-function fetchData() {
-    return fetch('https://facebook.github.io/react-native/movies.json')
-        .then((response) => response.json)
-        .then((responseJson) => {
-            return responseJson.moviesl
-        })
-        .catch((error) => {
-            console.error(error);
-        })
+    _onRefresh() {
+        this.setState({isRefreshing: true});
+        fetch('https://gank.io/api/data/Android/10/1')
+            .then((response) => {
+                this.setState({isRefreshing: false});
+                return response.json();
+            }).then((responseJson) => {
+            this.setState({
+                dataSource: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}).cloneWithRows(responseJson.results),
+            })
+        }).catch((error => {
+            alert(error.toString())
+        }))
+        ;
+    }
+
 }

@@ -17,8 +17,11 @@ var DeviceWidth = Dimensions.get('window').width;
 export default class extends Component {
 
     render() {
-        let title = this.props.title;
-        let date = '2017-04-08 12:00';
+        let item = this.props.data;
+        let who = item.who === null ? 'Gank.io' : item.who;
+        let desc = item.desc;
+        var dateStr = item.publishedAt;
+        let date = dateStr;
         let img = {
             uri: 'https://upload.wikimedia.org/wikipedia/commons/d/de/Bananavarieties.jpg'
         };
@@ -27,10 +30,10 @@ export default class extends Component {
             <View style={styles.all_background}>
                 <Image source={img} style={styles.img}/>
                 <View style={styles.content}>
-                    <Text style={styles.title}>{title}</Text>
+                    <Text style={styles.title}>{who}</Text>
                     <Text style={styles.date}>{date}</Text>
                 </View>
-                <Text style={styles.description}>{this.props.description}</Text>
+                {/*<Text style={styles.description}>{desc}</Text>*/}
             </View>
         );
     }
