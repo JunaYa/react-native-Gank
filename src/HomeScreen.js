@@ -10,6 +10,10 @@ export default class extends Component {
     // Initialize the hardcoded data
     static navigationOptions = {
         title: "Gank",
+        header:({
+            style:{backgroundColor:'#212121'},
+            titleStyle:{color:'#ffffff'}
+        })
     };
 
     constructor(props) {

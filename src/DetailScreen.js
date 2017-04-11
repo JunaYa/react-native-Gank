@@ -10,6 +10,11 @@ import {
 export default class  extends Component {
     static navigationOptions = {
         title: ({state}) => state.params.data.desc,
+        header:({
+            style:{backgroundColor:'#212121'},
+            titleStyle:{color:'#ffffff'},
+            tintColor:'#ffffff'
+        })
     };
 
     state = {
