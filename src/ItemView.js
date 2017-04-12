@@ -23,7 +23,7 @@ export default class extends Component {
         let item = this.props.data;
         let who = item.who === null ? 'Gank.io' : item.who;
         let desc = item.desc;
-        var dateStr = item.publishedAt;
+        var dateStr = _parseDate(item.publishedAt);
         let date = dateStr;
 
         if ('images' in item) {
@@ -101,3 +101,12 @@ const styles = StyleSheet.create({
     }
 });
 
+function _parseDate(dateStr) {
+    var date = new Date(dateStr);
+    var year = date.getFullYear();
+    var month = '' + (date.getMonth() + 1);
+    if (month.length < 2) month = '0' + month;
+    var day = '' + date.getDate();
+    if (day.length < 2) day = '0' + day;
+    return [year, month, day].join('-');
+}
