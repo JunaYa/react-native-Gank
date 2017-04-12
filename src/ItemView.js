@@ -25,16 +25,15 @@ export default class extends Component {
         let desc = item.desc;
         var dateStr = item.publishedAt;
         let date = dateStr;
-        let images = item['images'];
-        let img = {
-            uri: item.images === undefined
-                ? 'https://upload.wikimedia.org/wikipedia/commons/d/de/Bananavarieties.jpg'
-                : images[0].replace("http", "https")
-        }
-        if (images === undefined) {
+
+        if ('images' in item) {
+            let images = item.images;
+            let img = {
+                uri: images[0].replace("http", "https")
+            }
             return (
                 <View style={styles.background}>
-                    <Text style={styles.description}>{desc}</Text>
+                    <Image source={img} style={styles.img}/>
                     <View style={styles.content}>
                         <Text style={styles.title}>{who}</Text>
                         <Text style={styles.date}>{date}</Text>
@@ -44,7 +43,7 @@ export default class extends Component {
         } else {
             return (
                 <View style={styles.background}>
-                    <Image source={img} style={styles.img}/>
+                    <Text style={styles.description}>{desc}</Text>
                     <View style={styles.content}>
                         <Text style={styles.title}>{who}</Text>
                         <Text style={styles.date}>{date}</Text>
