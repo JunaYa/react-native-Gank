@@ -13,8 +13,20 @@ import {
 } from 'react-native';
 
 
-var DeviceWidth = Dimensions.get('window').width;
-var DeviceHeight = Dimensions.get('window').height;
+var DeviceWidth = Dimensions.get('window').width - 8;
+var DeviceHeight = Dimensions.get('window').height / 2 - 38;
+
+
+function _parseDate(dateStr) {
+    var date = new Date(dateStr);
+    var year = date.getFullYear();
+    var month = '' + (date.getMonth() + 1);
+    if (month.length < 2) month = '0' + month;
+    var day = '' + date.getDate();
+    if (day.length < 2) day = '0' + day;
+    return [year, month, day].join('-');
+}
+
 
 export default class extends Component {
 
@@ -29,16 +41,20 @@ export default class extends Component {
         if ('images' in item) {
             let images = item.images;
             let img = {
-                uri: images[0].replace("http", "https")
+                uri: images[0].replace("http", "https"),
             }
             return (
-                <View style={styles.background}>
-                    <Image source={img} style={styles.img}/>
-                    <View style={styles.content}>
-                        <Text style={styles.title}>{who}</Text>
-                        <Text style={styles.date}>{date}</Text>
+                <Image source={img}
+                       resizeMode={Image.resizeMode.contain}
+                       style={styles.img}>
+                    <View style={styles.content_image}>
+                        <Text numberOfLines={1} style={styles.description}>{desc}</Text>
+                        <View style={styles.content}>
+                            <Text style={styles.title}>{who}</Text>
+                            <Text style={styles.date}>{date}</Text>
+                        </View>
                     </View>
-                </View>
+                </Image>
             );
         } else {
             return (
@@ -58,41 +74,55 @@ const styles = StyleSheet.create({
     background: {
         flex: 1,
         flexDirection: 'column',
-        backgroundColor: '#0b1335',
-        marginBottom: 4,
+        backgroundColor: '#000000',
+        paddingLeft: 16,
+        paddingRight: 16,
+        paddingTop: 8,
+        paddingBottom: 8,
         marginTop: 4,
+        marginBottom: 0,
         marginLeft: 4,
         marginRight: 4,
-        borderRadius: 6,
-        paddingTop: 16,
-        paddingBottom: 16
+
     },
     img: {
-        width: DeviceWidth - 8,
-        height: DeviceWidth / 3 * 2,
-        marginBottom: 8,
+        width: DeviceWidth,
+        height: DeviceHeight,
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'flex-end',
+        backgroundColor: '#000000',
+        marginTop: 4,
+        marginBottom: 0,
+        marginLeft: 4,
+        marginRight: 4,
+    },
+    content_image: {
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'center',
+        maxHeight: 62,
+        paddingLeft: 16,
+        paddingRight: 16,
+        paddingTop: 8,
+        paddingBottom: 8,
+        backgroundColor: '#000000',
+        opacity: 0.6,
+
     },
     content: {
         flex: 1,
         flexDirection: 'row',
         justifyContent: 'space-between',
-        alignItems: 'center',
-        paddingBottom: 8,
-        paddingLeft: 16,
-        paddingRight: 16,
-        backgroundColor: '#0b1335',
-
     },
     title: {
         color: 'white',
-        fontSize: 18,
+        fontSize: 16,
     },
     description: {
         color: 'white',
-        fontSize: 16,
-        paddingLeft: 16,
-        paddingRight: 16,
-        marginBottom: 8
+        fontSize: 14,
+        marginBottom: 8,
     },
     date: {
         color: '#ffc941',
@@ -100,13 +130,3 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     }
 });
-
-function _parseDate(dateStr) {
-    var date = new Date(dateStr);
-    var year = date.getFullYear();
-    var month = '' + (date.getMonth() + 1);
-    if (month.length < 2) month = '0' + month;
-    var day = '' + date.getDate();
-    if (day.length < 2) day = '0' + day;
-    return [year, month, day].join('-');
-}
