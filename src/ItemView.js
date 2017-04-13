@@ -11,7 +11,7 @@ import {
     Image,
     Dimensions
 } from 'react-native';
-
+import IndicatorView from './widget/IndicatorView'
 
 var DeviceWidth = Dimensions.get('window').width - 8;
 var DeviceHeight = Dimensions.get('window').height / 2 - 38;
@@ -39,14 +39,15 @@ export default class extends Component {
         let date = dateStr;
 
         if ('images' in item) {
-            let images = item.images;
-            let img = {
-                uri: images[0].replace("http", "https"),
-            }
+            let images = item.images.map(x => x.replace('http:', 'https:'));
+            let img = [
+                {uri: images[images.length - 1]},
+            ]
             return (
                 <Image source={img}
                        resizeMode={Image.resizeMode.contain}
                        style={styles.img}>
+                    <IndicatorView pageCount={images.length}/>
                     <View style={styles.content_image}>
                         <Text numberOfLines={1} style={styles.description}>{desc}</Text>
                         <View style={styles.content}>
@@ -54,6 +55,8 @@ export default class extends Component {
                             <Text style={styles.date}>{date}</Text>
                         </View>
                     </View>
+
+
                 </Image>
             );
         } else {
@@ -108,7 +111,6 @@ const styles = StyleSheet.create({
         paddingBottom: 8,
         backgroundColor: '#000000',
         opacity: 0.6,
-
     },
     content: {
         flex: 1,

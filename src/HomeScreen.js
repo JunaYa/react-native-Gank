@@ -53,7 +53,7 @@ export default class extends Component {
 
     _onRefresh() {
         this.setState({isRefreshing: true});
-        fetch('https://gank.io/api/data/Android/10/1')
+        fetch('https://gank.io/api/data/iOS/10/50')
             .then((response) => {
                 this.setState({isRefreshing: false});
                 return response.json();
