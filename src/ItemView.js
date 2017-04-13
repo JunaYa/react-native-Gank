@@ -44,9 +44,11 @@ export default class extends Component {
                 {uri: images[images.length - 1]},
             ]
             return (
-                <Image source={img}
-                       resizeMode={Image.resizeMode.contain}
-                       style={styles.img}>
+                <Image
+                    defaultSource={require('./res/img/ic_place_holder.png')}
+                    source={img}
+                    resizeMode={Image.resizeMode.contain}
+                    style={styles.img}>
                     <IndicatorView pageCount={images.length}/>
                     <View style={styles.content_image}>
                         <Text numberOfLines={1} style={styles.description}>{desc}</Text>
