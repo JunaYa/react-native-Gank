@@ -13,8 +13,8 @@ import {
 } from 'react-native';
 import IndicatorView from './widget/IndicatorView'
 
-var DeviceWidth = Dimensions.get('window').width - 8;
-var DeviceHeight = Dimensions.get('window').height / 2 - 38;
+var DeviceWidth = Dimensions.get('window').width / 2 - 8;
+var DeviceHeight = DeviceWidth + 16;
 
 
 function _parseDate(dateStr) {
